@@ -193,56 +193,26 @@ let bigTextShown = false; //mostra "Wow, that’s big!" solo una volta
 
 // Crea le card dei Pokémon
 function createPokemonCards() {
-  for (let i = 0; i < pokemonList.length; i++) {
-    let pokemon = pokemonList[i];
-    let pokemonDiv = document.createElement("div");
-    pokemonDiv.classList.add("pokemon-card");
+  for (let pokemon of pokemonList) {
+    const card = document.createElement("div");
+    card.className = "pokemon-card";
 
-    // Set colore dinamico
-    let type1 = pokemon.type[0];
-    let type2 = pokemon.type[1];
+    const color1 = typeColors[pokemon.type[0]] || "#999";
+    const color2 = pokemon.type[1] ? typeColors[pokemon.type[1]] : color1;
 
-    let color1 = typeColors[type1] || "#ccc";
-    let color2 = type2 ? typeColors[type2] || "#ccc" : color1;
+    card.innerHTML = `
+      <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png" alt="${pokemon.name}" />
+      <div class="pokemon-number">#${pokemon.id.toString().padStart(3, "0")}</div>
+      <div class="pokemon-name">${pokemon.name}</div>
+      <div class="pokemon-type">
+      
+        ${pokemon.type.map(t => `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`).join("")}
+      </div>
+    `;
 
-    // gradient metà e metà
-    pokemonDiv.style.background = `linear-gradient(to right, ${color1} 0%, ${color1} 50%, ${color2} 50%, ${color2} 100%)`;
-
-    // Immagine
-    let image = document.createElement("img");
-    image.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
-    image.alt = pokemon.name;
-
-    // Parse height & weight
-    let heightNumber = parseFloat(pokemon.height); // da "1.7 m" a 1.7
-    let weightNumber = parseFloat(pokemon.weight); // da "90.5 kg" a 90.5
-
-    // Debug info in console
-    console.log(`${pokemon.name}: ${heightNumber} m`);
-
-    // Contenuto
-    let infoHTML = `
-    <h2>${pokemon.name}</h2>
-    <p>Type: ${pokemon.type.join(", ")}</p>
-    <p>Height: ${pokemon.height} m</p>
-    <p>Weight: ${pokemon.weight} kg</p>
-  `;
-
-    // Mostra "Wow, that's big!" solo per il primo che supera 1.6 m
-    if (heightNumber > 1.5 && !bigTextShown) {
-      infoHTML += `<p class="big">Wow, that’s big!</p>`;
-      console.log(
-        `${pokemon.name} è alto ${heightNumber} m - Wow, that’s big!`
-      );
-      bigTextShown = true;
-    }
-
-    pokemonDiv.appendChild(image);
-    pokemonDiv.innerHTML += infoHTML;
-    container.appendChild(pokemonDiv);
+    container.appendChild(card);
   }
 }
 
+
 createPokemonCards();
-document.getElementById("output").innerText =
-  "Pokémon cards created successfully!";
