@@ -189,12 +189,28 @@ let pokemonRepository = (function () {
     },
   ];
 
+  // Funzione per trovare un Pokémon per nome
+  function findPokemonByName(name) {
+    return pokemonList.filter(function (pokemon) {
+      return pokemon.name.toLowerCase() === name.toLowerCase();
+    });
+  }
+  // Funzione per trovare un Pokémon per ID
+  function findPokemonById(id) {
+    return pokemonList.filter(function (pokemon) {
+      return pokemon.id === id;
+    });
+  }
+
+  // Funzioni per gestire la lista dei Pokémon
   function add(pokemon) {
     if (
       typeof pokemon === "object" &&
       "name" in pokemon &&
       "id" in pokemon &&
-      "type" in pokemon
+      "type" in pokemon &&
+      "height" in pokemon &&
+      "weight" in pokemon
     ) {
       pokemonList.push(pokemon);
     } else {
@@ -204,10 +220,12 @@ let pokemonRepository = (function () {
   function getAll() {
     return pokemonList;
   }
-  
+
   return {
     add: add,
     getAll: getAll,
+    findPokemonByName: findPokemonByName,
+    findPokemonById: findPokemonById,
   };
 })();
 
