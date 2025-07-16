@@ -188,31 +188,37 @@ let pokemonList = [
   },
 ];
 
-let container = document.getElementById("pokemon-container");
-let bigTextShown = false; //mostra "Wow, that’s big!" solo una volta
+/* let container = document.getElementById("pokemon-container");
+let bigTextShown = false; //mostra "Wow, that’s big!" solo una volta */
 
 // Crea le card dei Pokémon
-function createPokemonCards() {
-  for (let pokemon of pokemonList) {
-    const card = document.createElement("div");
-    card.className = "pokemon-card";
+pokemonRepository.getAll().foreach(function (pokemon) {
+  const card = document.createElement("div");
+  card.className = "pokemon-card";
 
-    const color1 = typeColors[pokemon.type[0]] || "#999";
-    const color2 = pokemon.type[1] ? typeColors[pokemon.type[1]] : color1;
+  const color1 = typeColors[pokemon.type[0]] || "#999";
+  const color2 = pokemon.type[1] ? typeColors[pokemon.type[1]] : color1;
 
-    card.innerHTML = `
-      <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png" alt="${pokemon.name}" />
-      <div class="pokemon-number">#${pokemon.id.toString().padStart(3, "0")}</div>
+  card.innerHTML = `
+      <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+        pokemon.id
+      }.png" alt="${pokemon.name}" />
+      <div class="pokemon-number">#${pokemon.id
+        .toString()
+        .padStart(3, "0")}</div>
       <div class="pokemon-name">${pokemon.name}</div>
       <div class="pokemon-type">
       
-        ${pokemon.type.map(t => `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`).join("")}
+        ${pokemon.type
+          .map(
+            (t) =>
+              `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`
+          )
+          .join("")}
       </div>
     `;
 
-    container.appendChild(card);
-  }
-}
-
+  container.appendChild(card);
+});
 
 createPokemonCards();
