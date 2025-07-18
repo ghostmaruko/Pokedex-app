@@ -221,11 +221,38 @@ let pokemonRepository = (function () {
     return pokemonList;
   }
 
+  function addListItem(pokemon) {
+    let pokemonListElement = document.querySelector(".pokemon-list");
+    let listItem = document.createElement("li");
+    let button = document.createElement("button");
+    button.innerText = pokemon.name;
+    button.classList.add("pokemon-button");
+
+    // Crea un bottone per il Pokémon
+
+    let color1 = typeColors[pokemon.type[0]] || "#999";
+    let color2 = pokemon.type[1] ? typeColors[pokemon.type[1]] : color1;
+    button.style.background = `linear-gradient(45deg, ${color1}, ${color2})`;
+
+    button.addEventListener("click", function () {
+      showDetails(pokemon);
+    });
+
+    listItem.appendChild(button);
+    pokemonListElement.appendChild(listItem);
+  }
+  // Funzione per mostrare i dettagli del Pokémon
+  function showDetails(pokemon) {
+    console.log(pokemon);
+  }
+
   return {
     add: add,
     getAll: getAll,
     findPokemonByName: findPokemonByName,
     findPokemonById: findPokemonById,
+    addListItem: addListItem,
+    showDetails: showDetails,
   };
 })();
 
@@ -233,7 +260,7 @@ let container = document.getElementById("pokemon-container");
 let bigTextShown = false; //mostra "Wow, that’s big!" solo una volta
 
 // Crea le card dei Pokémon
-function createPokemonCards() {
+/* function createPokemonCards() {
   pokemonRepository.getAll().forEach(function (pokemon) {
     const card = document.createElement("div");
     card.className = "pokemon-card";
@@ -264,4 +291,9 @@ function createPokemonCards() {
   });
 }
 
-createPokemonCards();
+createPokemonCards(); */
+
+// Aggiungi i Pokémon alla lista
+pokemonRepository.getAll().forEach(function (pokemon) {
+  pokemonRepository.addListItem(pokemon);
+}
