@@ -69,21 +69,5 @@ h1 {
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.85rem;
-  font-weight: 6;
-}
-
-.pokemon-button {
-  padding: 10px 15px;
-  margin: 5px;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.pokemon-button:hover {
-  transform: scale(1.05);
+  font-weight: 6
 }
