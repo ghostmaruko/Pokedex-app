@@ -187,6 +187,20 @@ let pokemonRepository = (function () {
       height: "3.5 m",
       weight: "65.0 kg",
     },
+    {
+      id: 25,
+      name: "Pikachu",
+      type: ["Electric"],
+      height: "0.4 m",
+      weight: "6.0 kg",
+    },
+    {
+      id: 26,
+      name: "Raichu",
+      type: ["Electric"],
+      height: "0.8 m",
+      weight: "30.0 kg",
+    }
   ];
 
   // Funzione per trovare un Pokémon per nome
