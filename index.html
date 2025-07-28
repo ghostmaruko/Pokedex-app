@@ -10,6 +10,16 @@
     <h1>Kanto Pokémon</h1>
     <h2>Pokédex-app</h2>
     <div id="pokemon-container"></div>
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="close-button" class="close-button">&times;</span>
+        <img id="modal-image" src="" alt="" class="modal-image" />
+        <h2 id="modal-name"></h2>
+        <p><strong>Altezza:</strong> <span id="modal-height"></span></p>
+        <p><strong>Tipo:</strong> <span id="modal-types"></span></p>
+      </div>
+    </div>
+
     <p id="output"></p>
     <!-- <div id="floating-box" class="speak-box" style="display: none"></div> -->
     <script src="js/promise-polyfill.js"></script>
