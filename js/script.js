@@ -18,204 +18,10 @@ const typeColors = {
 };
 
 let pokemonRepository = (function () {
-  let pokemonList = [
-    {
-      id: 1,
-      name: "Bulbasaur",
-      type: ["Grass", "Poison"],
-      height: "0.7 m",
-      weight: "6.9 kg",
-    },
-    {
-      id: 2,
-      name: "Ivysaur",
-      type: ["Grass", "Poison"],
-      height: "1.0 m",
-      weight: "13.0 kg",
-    },
-    {
-      id: 3,
-      name: "Venusaur",
-      type: ["Grass", "Poison"],
-      height: "2.0 m",
-      weight: "100.0 kg",
-    },
-    {
-      id: 4,
-      name: "Charmander",
-      type: ["Fire"],
-      height: "0.6 m",
-      weight: "8.5 kg",
-    },
-    {
-      id: 5,
-      name: "Charmeleon",
-      type: ["Fire"],
-      height: "1.1 m",
-      weight: "19.0 kg",
-    },
-    {
-      id: 6,
-      name: "Charizard",
-      type: ["Fire", "Flying"],
-      height: "1.7 m",
-      weight: "90.5 kg",
-    },
-    {
-      id: 7,
-      name: "Squirtle",
-      type: ["Water"],
-      height: "0.5 m",
-      weight: "9.0 kg",
-    },
-    {
-      id: 8,
-      name: "Wartortle",
-      type: ["Water"],
-      height: "1.0 m",
-      weight: "22.5 kg",
-    },
-    {
-      id: 9,
-      name: "Blastoise",
-      type: ["Water"],
-      height: "1.6 m",
-      weight: "85.5 kg",
-    },
-    {
-      id: 10,
-      name: "Caterpie",
-      type: ["Bug"],
-      height: "0.3 m",
-      weight: "2.9 kg",
-    },
-    {
-      id: 11,
-      name: "Metapod",
-      type: ["Bug"],
-      height: "0.7 m",
-      weight: "9.9 kg",
-    },
-    {
-      id: 12,
-      name: "Butterfree",
-      type: ["Bug", "Flying"],
-      height: "1.1 m",
-      weight: "32.0 kg",
-    },
-    {
-      id: 13,
-      name: "Weedle",
-      type: ["Bug", "Poison"],
-      height: "0.3 m",
-      weight: "3.2 kg",
-    },
-    {
-      id: 14,
-      name: "Kakuna",
-      type: ["Bug", "Poison"],
-      height: "0.6 m",
-      weight: "10.0 kg",
-    },
-    {
-      id: 15,
-      name: "Beedrill",
-      type: ["Bug", "Poison"],
-      height: "1.0 m",
-      weight: "29.5 kg",
-    },
-    {
-      id: 16,
-      name: "Pidgey",
-      type: ["Normal", "Flying"],
-      height: "0.3 m",
-      weight: "1.8 kg",
-    },
-    {
-      id: 17,
-      name: "Pidgeotto",
-      type: ["Normal", "Flying"],
-      height: "1.1 m",
-      weight: "30.0 kg",
-    },
-    {
-      id: 18,
-      name: "Pidgeot",
-      type: ["Normal", "Flying"],
-      height: "1.5 m",
-      weight: "39.5 kg",
-    },
-    {
-      id: 19,
-      name: "Rattata",
-      type: ["Normal"],
-      height: "0.3 m",
-      weight: "3.5 kg",
-    },
-    {
-      id: 20,
-      name: "Raticate",
-      type: ["Normal"],
-      height: "0.7 m",
-      weight: "18.5 kg",
-    },
-    {
-      id: 21,
-      name: "Spearow",
-      type: ["Normal", "Flying"],
-      height: "0.3 m",
-      weight: "2.0 kg",
-    },
-    {
-      id: 22,
-      name: "Fearow",
-      type: ["Normal", "Flying"],
-      height: "1.2 m",
-      weight: "38.0 kg",
-    },
-    {
-      id: 23,
-      name: "Ekans",
-      type: ["Poison"],
-      height: "2.0 m",
-      weight: "6.9 kg",
-    },
-    {
-      id: 24,
-      name: "Arbok",
-      type: ["Poison"],
-      height: "3.5 m",
-      weight: "65.0 kg",
-    },
-    {
-      id: 25,
-      name: "Pikachu",
-      type: ["Electric"],
-      height: "0.4 m",
-      weight: "6.0 kg",
-    },
-    {
-      id: 26,
-      name: "Raichu",
-      type: ["Electric"],
-      height: "0.8 m",
-      weight: "30.0 kg",
-    }
-  ];
+  let pokemonList = [];
+  let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
 
-  // Funzione per trovare un Pokémon per nome
-  function findPokemonByName(name) {
-    return pokemonList.filter(function (pokemon) {
-      return pokemon.name.toLowerCase() === name.toLowerCase();
-    });
-  }
-  // Funzione per trovare un Pokémon per ID
-  function findPokemonById(id) {
-    return pokemonList.filter(function (pokemon) {
-      return pokemon.id === id;
-    });
-  }
-
+  // Funzione per aggiungere un Pokémon alla lista
   // Funzioni per gestire la lista dei Pokémon
   function add(pokemon) {
     if (
@@ -235,16 +41,69 @@ let pokemonRepository = (function () {
     return pokemonList;
   }
 
+  // Funzione per caricare i Pokémon dall'API
+  function loadList() {
+    return fetch(apiUrl)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        console.log("lista completa Pokémon (JSON):", json); // Log della lista completa dei Pokémon
+        json.results.forEach(function (item) {
+          let pokemon = {
+            name: item.name,
+            detailsUrl: item.url,
+            id: item.url.split("/").slice(-2)[0], // Estrae l'ID dall'URL
+            type: [], // Inizializza un array vuoto per il tipo
+            height: 0, // Inizializza l'altezza a 0
+            weight: 0, // Inizializza il peso a 0
+          };
+          add(pokemon);
+        });
+      })
+      .catch(function (e) {
+        console.error("Error loading Pokémon list:", e);
+      });
+  }
+
+  function loadDetails(item) {
+    return fetch(item.detailsUrl)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (details) {
+        console.log("Dettagli del Pokémon:", details); // Log dei dettagli del Pokémon
+        item.id = details.id;
+        item.imageUrl = details.sprites.front_default;
+        item.height = details.height;
+        item.types = details.types;
+      })
+      .catch(function (e) {
+        console.error(e);
+      });
+  }
+
+  function showDetails(pokemon) {
+    loadDetails(pokemon).then(function () {
+      console.log(pokemon);
+    });
+  }
+
   return {
     add: add,
     getAll: getAll,
-    findPokemonByName: findPokemonByName,
-    findPokemonById: findPokemonById,
+    loadList: loadList,
+    loadDetails: loadDetails,
+    showDetails: showDetails,
   };
 })();
 
+// funzione per capitalizzare la prima lettera di una stringa
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 let container = document.getElementById("pokemon-container");
-let bigTextShown = false; //mostra "Wow, that’s big!" solo una volta
 
 // Crea le card dei Pokémon
 function createPokemonCards() {
@@ -252,23 +111,19 @@ function createPokemonCards() {
     const card = document.createElement("div");
     card.className = "pokemon-card";
 
-    const color1 = typeColors[pokemon.type[0]] || "#999";
-    const color2 = pokemon.type[1] ? typeColors[pokemon.type[1]] : color1;
+    // Estrai i nomi dei tipi (es. "Fire", "Flying")
+    const types = pokemon.types.map(t => capitalizeFirstLetter(t.type.name));
+    const color1 = typeColors[types[0]] || "#999";
+    const color2 = types[1] ? typeColors[types[1]] : color1;
 
     card.innerHTML = `
-      <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-        pokemon.id
-      }.png" alt="${pokemon.name}" />
-      <div class="pokemon-number">#${pokemon.id
-        .toString()
-        .padStart(3, "0")}</div>
-      <div class="pokemon-name">${pokemon.name}</div>
+      <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png" alt="${pokemon.name}" />
+      <div class="pokemon-number">#${pokemon.id.toString().padStart(3, "0")}</div>
+      <div class="pokemon-name">${capitalizeFirstLetter(pokemon.name)}</div>
       <div class="pokemon-type">
-      
-        ${pokemon.type
+        ${types
           .map(
-            (t) =>
-              `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`
+            (t) => `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`
           )
           .join("")}
       </div>
@@ -278,4 +133,32 @@ function createPokemonCards() {
   });
 }
 
-createPokemonCards();
+
+// carica i dati dall'API e crea le card
+pokemonRepository.loadList().then(function () {
+  let promises = pokemonRepository
+    .getAll()
+    .map((pokemon) => pokemonRepository.loadDetails(pokemon));
+  Promise.all(promises).then(function () {
+    createPokemonCards();
+  });
+});
+
+// Funzione per trovare un Pokémon per nome
+/*   function findPokemonByName(name) {
+    return pokemonList.filter(function (pokemon) {
+      return pokemon.name.toLowerCase() === name.toLowerCase();
+    });
+  } */
+// Funzione per trovare un Pokémon per ID
+/*   function findPokemonById(id) {
+    return pokemonList.filter(function (pokemon) {
+      return pokemon.id === id;
+    });
+  } */
+
+/* pokemonRepository.loadList().then(function () {
+  pokemonRepository.getAll().forEach(function (pokemon) {
+    pokemonRepository.addListItem(pokemon);
+  });
+}); */
