@@ -24,10 +24,6 @@ const translations = {
     height: "Height",
     type: "Type",
     description: "Description",
-    modalName: "Name",
-    modalHeight: "Height",
-    modalType: "Type",
-    modalDescription: "Description",
   },
   it: {
     title: "Pokédex App",
@@ -35,10 +31,6 @@ const translations = {
     height: "Altezza",
     type: "Tipo",
     description: "Descrizione",
-    modalName: "Nome",
-    modalHeight: "Altezza",
-    modalType: "Tipo",
-    modalDescription: "Descrizione",
   },
   ja: {
     title: "ポケモン図鑑",
@@ -46,10 +38,6 @@ const translations = {
     height: "高さ",
     type: "タイプ",
     description: "説明",
-    modalName: "名前",
-    modalHeight: "高さ",
-    modalType: "タイプ",
-    modalDescription: "説明",
   },
 };
 
@@ -61,27 +49,33 @@ function getUserLanguage() {
 let currentLanguage = getUserLanguage();
 
 function applyTranslations(lang) {
-  //aggiorna testi statici pagina
-  document.querySelector("h1").textContent = translations[lange].subtitle;
+  document.querySelector("h1").textContent = translations[lang].subtitle;
   document.querySelector("h2").textContent = translations[lang].title;
-  document.querySelector('label[for="modal-height"]').textContent =
-    translations[lang].height + ":";
-  document.querySelector('label[for="modal-type"]').textContent =
-    translations[lang].type + ":";
-
-  // Se il modal è aperto, aggiorna anche i suoi testi statici (etichette)
-  const modal = document.getElementById("modal");
-  if (modal && !modal.classList.contains("hidden")) {
-    document.getElementById("modal-height-label").textContent =
-      translations[lang].height + ":";
-    document.getElementById("modal-type-label").textContent =
-      translations[lang].type + ":";
-    document.getElementById("modal-description-label").textContent =
-      translations[lang].description + ":";
+  document.querySelectorAll(".pokemon-card").forEach((card) => {
+    const name = card.getAttribute(`data-name-${lang}`);
+    const types = card.getAttribute(`data-types-${lang}`);
+    if (name) {
+      card.querySelector(".pokemon-name").textContent = name;
+    }
+    if (types) {
+      const typeArray = types.split(",");
+      const typeHTML = typeArray
+        .map(
+          (t) =>
+            `<span class="type-badge" style="background-color:${
+              typeColors[t] || "#ccc"
+            }">${t}</span>`
+        )
+        .join("");
+      card.querySelector(".pokemon-type").innerHTML = typeHTML;
+    }
+  });
+  // Update modal if it's open
+  if (currentPokemon) {
+    updateModalTexts(currentPokemon);
   }
 }
 
-// Imposta classe "selected" al bottone lingua attivo
 function updateLanguageButtons(selectedLang) {
   document.querySelectorAll("#language-selector button").forEach((btn) => {
     if (btn.getAttribute("data-lang") === selectedLang) {
@@ -92,53 +86,32 @@ function updateLanguageButtons(selectedLang) {
   });
 }
 
-// Aggiorna i testi dinamici della modale in base alla lingua
 function updateModalTexts(pokemon) {
-  const modalName = document.getElementById("modal-name");
-  const modalHeight = document.getElementById("modal-height");
-  const modalTypes = document.getElementById("modal-types");
-  const modalDescription = document.getElementById("modal-description");
-
-  modalName.textContent = capitalizeFirstLetter(pokemon.name);
-  modalHeight.textContent = pokemon.height;
-  const types = pokemon.types
-    ? pokemon.types.map((t) => capitalizeFirstLetter(t.type.name))
-    : [];
-  modalTypes.textContent = types.join(", ");
-
-  // Description in lingua corrente (la stringa è già tradotta in loadDetails)
-  modalDescription.textContent =
+  document.getElementById("modal-name").textContent =
+    pokemon.localizedNames[currentLanguage] || capitalizeFirstLetter(pokemon.name);
+  document.getElementById("modal-description").textContent =
     pokemon.description || "No description available.";
 }
 
 document.querySelectorAll("#language-selector button").forEach((btn) => {
   btn.addEventListener("click", (e) => {
-    const lang = e.target.getAttribute("data-lang");
+    const lang = e.currentTarget.getAttribute("data-lang");
     if (translations[lang]) {
       currentLanguage = lang;
       applyTranslations(lang);
       updateLanguageButtons(lang);
-      // Se il modal è aperto, aggiorna i testi dinamici con la nuova lingua
-      const modal = document.getElementById("modal");
-      if (!modal.classList.contains("hidden") && currentPokemon) {
-        // Ricarica i dettagli in lingua nuova e aggiorna modale
-        pokemonRepository.loadDetails(currentPokemon).then(() => {
-          updateModalTexts(currentPokemon);
-        });
-      }
+      container.innerHTML = "";
+      createPokemonCards();
     }
   });
 });
 
-// Variabile globale per tenere traccia del Pokémon corrente nella modale
 let currentPokemon = null;
 
 let pokemonRepository = (function () {
   let pokemonList = [];
   let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
 
-  // Funzione per aggiungere un Pokémon alla lista
-  // Funzioni per gestire la lista dei Pokémon
   function add(pokemon) {
     if (
       typeof pokemon === "object" &&
@@ -157,50 +130,42 @@ let pokemonRepository = (function () {
     return pokemonList;
   }
 
-  // Funzione per caricare i Pokémon dall'API
   function loadList() {
     return fetch(apiUrl)
       .then(function (response) {
         return response.json();
       })
       .then(function (json) {
-        console.log("lista completa Pokémon (JSON):", json); // Log della lista completa dei Pokémon
         json.results.forEach(function (item) {
           let pokemon = {
             name: item.name,
             detailsUrl: item.url,
-            id: item.url.split("/").slice(-2)[0], // Estrae l'ID dall'URL
-            type: [], // Inizializza un array vuoto per il tipo
-            height: 0, // Inizializza l'altezza a 0
-            weight: 0, // Inizializza il peso a 0
+            id: item.url.split("/").slice(-2)[0],
+            type: [],
+            height: 0,
+            weight: 0,
+            localizedNames: {},
+            localizedTypes: {},
           };
           add(pokemon);
         });
-        hideLoadingMessage(); // Nascondi il messaggio di caricamento dopo aver caricato la lista
-        console.log("Lista Pokémon caricata:", pokemonList); // Log della lista dei Pokémon caric
+        hideLoadingMessage();
       })
       .catch(function (e) {
         console.error("Error loading Pokémon list:", e);
-        hideLoadingMessage(); // Nascondi il messaggio di caricamento in caso di errore
+        hideLoadingMessage();
       });
   }
 
   function loadDetails(item) {
-    showLoadingMessage(); // Mostra il messaggio di caricamento prima di fare la richiesta
-    console.log("Dettagli del Pokémon:", item); // Log dei dettagli del Pokémon prima di fare la richiesta
-
+    showLoadingMessage();
     return fetch(item.detailsUrl)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (details) {
-        console.log("Dettagli del Pokémon:", details); // Log dei dettagli del Pokémon
+      .then((response) => response.json())
+      .then((details) => {
         item.id = details.id;
         item.imageUrl = details.sprites.front_default;
         item.height = details.height;
         item.types = details.types;
-
-        // fetch: ottenere descrizione ogni pokémon
         return fetch(`https://pokeapi.co/api/v2/pokemon-species/${item.id}/`);
       })
       .then((response) => response.json())
@@ -215,46 +180,37 @@ let pokemonRepository = (function () {
         item.description = flavor
           ? flavor.flavor_text.replace(/\n|\f/g, " ")
           : "No description available.";
-        hideLoadingMessage(); // Nascondi il messaggio di caricamento dopo aver caricato i dettagli
-        console.log("Dettagli del Pokémon aggiornati:", item); // Log dei dettagli aggiornati del Pokémon
+
+        item.localizedNames = {};
+        item.localizedTypes = {};
+        speciesDetails.names.forEach((n) => {
+          if (translations[n.language.name]) {
+            item.localizedNames[n.language.name] = n.name;
+          }
+        });
+        item.types.forEach((typeObj) => {
+          const typeName = typeObj.type.name;
+          item.localizedTypes[typeName] = {};
+          Object.keys(translations).forEach((lang) => {
+            item.localizedTypes[typeName][lang] = capitalizeFirstLetter(typeName);
+          });
+        });
+        hideLoadingMessage();
       })
       .catch((e) => {
         console.error(e);
-        hideLoadingMessage(); // Nascondi il messaggio di caricamento in caso di errore
+        hideLoadingMessage();
       });
   }
 
   function showDetails(pokemon) {
-    currentPokemon = pokemon; // aggiorna la variabile globale
+    currentPokemon = pokemon;
     pokemonRepository.loadDetails(pokemon).then(function () {
       const modal = document.getElementById("modal");
       const modalImage = document.getElementById("modal-image");
-      //aggiorna immagine 
       modalImage.src = pokemon.imageUrl;
       modalImage.alt = pokemon.name;
-
-      updateModalTexts(pokemon); // aggiorna i testi dinamici della modale
-      modal.classList.remove("hidden");
-      //aggiorna etichette della modale in base alla lingua 
-
-      
-
-      const modalName = document.getElementById("modal-name");
-      const modalHeight = document.getElementById("modal-height");
-      const modalTypes = document.getElementById("modal-types");
-      const modalDescription = document.getElementById("modal-description");
-
-      modalName.textContent = capitalizeFirstLetter(pokemon.name);
-      modalHeight.textContent = pokemon.height;
-      modalDescription.textContent =
-        pokemon.description || "No description available.";
-
-      // Mostra tipi
-      const types = pokemon.types.map((t) =>
-        capitalizeFirstLetter(t.type.name)
-      );
-      modalTypes.textContent = types.join(", ");
-
+      updateModalTexts(pokemon);
       modal.classList.remove("hidden");
     });
   }
@@ -282,44 +238,45 @@ let pokemonRepository = (function () {
   };
 })();
 
-// funzione per capitalizzare la prima lettera di una stringa
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 let container = document.getElementById("pokemon-container");
 
-// Crea le card dei Pokémon
 function createPokemonCards() {
   pokemonRepository.getAll().forEach(function (pokemon) {
     const card = document.createElement("div");
     card.className = "pokemon-card";
 
-    // Estrai i nomi dei tipi (es. "Fire", "Flying")
+    const name =
+      pokemon.localizedNames[currentLanguage] ||
+      capitalizeFirstLetter(pokemon.name);
     const types = pokemon.types.map((t) => capitalizeFirstLetter(t.type.name));
+    const localizedTypes = types.map((t) => t);
     const color1 = typeColors[types[0]] || "#999";
-    const color2 = types[1] ? typeColors[types[1]] : color1;
+
+    card.setAttribute(`data-name-${currentLanguage}`, name);
+    card.setAttribute(`data-types-${currentLanguage}`, localizedTypes.join(","));
 
     card.innerHTML = `
       <img class="pokemon-image" src="${pokemon.imageUrl}" alt="${
       pokemon.name
     }" />
-
-      <div class="pokemon-number">#${pokemon.id
-        .toString()
-        .padStart(3, "0")}</div>
-      <div class="pokemon-name">${capitalizeFirstLetter(pokemon.name)}</div>
+      <div class="pokemon-number">#${pokemon.id.toString().padStart(3, "0")}</div>
+      <div class="pokemon-name">${name}</div>
       <div class="pokemon-type">
         ${types
           .map(
             (t) =>
-              `<span class="type-badge" style="background-color:${typeColors[t]}">${t}</span>`
+              `<span class="type-badge" style="background-color:${
+                typeColors[t]
+              }">${t}</span>`
           )
           .join("")}
       </div>
     `;
 
-    // evento per mostrare i dettagli del Pokémon al click
     card.addEventListener("click", function () {
       pokemonRepository.showDetails(pokemon);
     });
@@ -328,7 +285,6 @@ function createPokemonCards() {
   });
 }
 
-// carica i dati dall'API e crea le card
 pokemonRepository.loadList().then(function () {
   let promises = pokemonRepository
     .getAll()
@@ -338,27 +294,21 @@ pokemonRepository.loadList().then(function () {
   });
 });
 
-// Gestione del modal IIFE
-// Gestione del modal per mostrare i dettagli del Pokémon
-// Nascondi il modal inizialmente
 (function () {
   const modal = document.getElementById("modal");
   const closeButton = document.getElementById("close-button");
   const modalContent = document.querySelector(".modal-content");
 
-  // Chiudi con il pulsante
   closeButton.addEventListener("click", function () {
     modal.classList.add("hidden");
   });
 
-  // Chiudi cliccando fuori dal contenuto
   modal.addEventListener("click", function (event) {
     if (!modalContent.contains(event.target)) {
       modal.classList.add("hidden");
     }
   });
 
-  // Chiudi con ESC
   window.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && !modal.classList.contains("hidden")) {
       modal.classList.add("hidden");
@@ -367,22 +317,3 @@ pokemonRepository.loadList().then(function () {
 })();
 
 applyTranslations(currentLanguage);
-
-// Funzione per trovare un Pokémon per nome
-/*   function findPokemonByName(name) {
-    return pokemonList.filter(function (pokemon) {
-      return pokemon.name.toLowerCase() === name.toLowerCase();
-    });
-  } */
-// Funzione per trovare un Pokémon per ID
-/*   function findPokemonById(id) {
-    return pokemonList.filter(function (pokemon) {
-      return pokemon.id === id;
-    });
-  } */
-
-/* pokemonRepository.loadList().then(function () {
-  pokemonRepository.getAll().forEach(function (pokemon) {
-    pokemonRepository.addListItem(pokemon);
-  });
-}); */

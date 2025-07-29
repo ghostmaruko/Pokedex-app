@@ -10,24 +10,15 @@
     <h1>Kanto Pokémon</h1>
     <h2>Pokédex App</h2>
 
-    <div class="language-selector">
-      <button class="lang-btn active" data-lang="en">
-        <img
-          src="https://hatscripts.github.io/circle-flags/flags/gb.svg"
-          width="48"
-        />
+    <div id="language-selector">
+      <button data-lang="en" class="lang-btn" aria-label="English">
+        🇬🇧 English
       </button>
-      <button class="lang-btn" data-lang="jp">
-        <img
-          src="https://hatscripts.github.io/circle-flags/flags/jp.svg"
-          width="54"
-        />
+      <button data-lang="it" class="lang-btn" aria-label="Italiano">
+        🇮🇹 Italiano
       </button>
-      <button class="lang-btn" data-lang="it">
-        <img
-          src="https://hatscripts.github.io/circle-flags/flags/it.svg"
-          width="48"
-        />
+      <button data-lang="ja" class="lang-btn" aria-label="日本語">
+        🇯🇵 日本語
       </button>
     </div>
 
@@ -45,13 +36,15 @@
         />
         <h2 id="modal-name"></h2>
         <p>
-          <label id="modal-height-label" for="modal-height">Altezza:</label>
+          <!-- <label id="modal-height-label" for="modal-height">Altezza:</label> -->
           <span id="modal-height"></span>
 
-          <label id="modal-type-label" for="modal-types">Tipo:</label>
+          <!-- <label id="modal-type-label" for="modal-types">Tipo:</label> -->
           <span id="modal-types"></span>
 
-          <label id="modal-description-label" for="modal-description"></label>
+          <!--  <label id="modal-description-label" for="modal-description"
+            >Descrizione:</label
+          > -->
         </p>
 
         <p id="modal-description"></p>

@@ -153,26 +153,24 @@ h2 {
 }
 
 .lang-btn:hover {
-  background-color: transparent
+  background-color: transparent;
 }
 
 .lang-btn.selected {
-  border-color: #007bff;
-  background-color: #cce5ff;
+  /* border-color: #007bff;
+  background-color: #cce5ff; */
   font-weight: bold;
+  color: red;
 }
 
-/* .language-switcher button {
-  padding: 8px 12px;
-  border: none;
-  background: #f0f0f0;
+/* .language-flag {
   cursor: pointer;
-  margin-right: 10px;
-  border-radius: 8px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
 }
 
-.language-switcher button.active {
-  background-color: #4caf50;
-  color: white;
-  font-weight: bold;
+.language-flag.active {
+  opacity: 1;
+  border: 2px solid #000;
+  border-radius: 5px;
 } */
