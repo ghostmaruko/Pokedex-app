@@ -10,6 +10,27 @@
     <h1>Kanto Pokémon</h1>
     <h2>Pokédex App</h2>
 
+    <div class="language-selector">
+      <button class="lang-btn active" data-lang="en">
+        <img
+          src="https://hatscripts.github.io/circle-flags/flags/gb.svg"
+          width="48"
+        />
+      </button>
+      <button class="lang-btn" data-lang="jp">
+        <img
+          src="https://hatscripts.github.io/circle-flags/flags/jp.svg"
+          width="54"
+        />
+      </button>
+      <button class="lang-btn" data-lang="it">
+        <img
+          src="https://hatscripts.github.io/circle-flags/flags/it.svg"
+          width="48"
+        />
+      </button>
+    </div>
+
     <div id="pokemon-container"></div>
 
     <!-- Modale per i dettagli -->
@@ -23,8 +44,16 @@
           class="modal-image"
         />
         <h2 id="modal-name"></h2>
-        <p><strong>Height:</strong> <span id="modal-height"></span></p>
-        <p><strong>Type:</strong> <span id="modal-types"></span></p>
+        <p>
+          <label id="modal-height-label" for="modal-height">Altezza:</label>
+          <span id="modal-height"></span>
+
+          <label id="modal-type-label" for="modal-types">Tipo:</label>
+          <span id="modal-types"></span>
+
+          <label id="modal-description-label" for="modal-description"></label>
+        </p>
+
         <p id="modal-description"></p>
       </div>
     </div>

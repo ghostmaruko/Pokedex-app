@@ -1,0 +1,24 @@
+[33me2aeae2[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m added modal, pokemon description, esc event to close modal
+[33m6ce0365[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix
+[33m2468f32[m add popup pokemon details
+[33m4c218d9[m add api, details, print in console
+[33m3972a9b[m added fetch-polyfill & promise
+[33m56aacab[m mod main branch
+[33m8b6c004[m Add Pikachu to main branch
+[33m529e977[m Merge pull request #2 from ghostmaruko/revert-1-dev
+[33mf65ec99[m Revert "Dev"
+[33me4ac4ef[m Merge pull request #1 from ghostmaruko/dev
+[33m5de9a10[m create new dev branch, list pokemon, css
+[33mef9422d[m create new dev branch, list pokemon
+[33m8c02a11[m added function findPokemon
+[33m850abfd[m  add IIFE
+[33mfe23305[m Refactoring con forEach()
+[33m35bbf8d[m modifica card, style and script
+[33mf261c1d[m add function show cards
+[33m258696f[m add for loops, some style and logic
+[33md6d2f72[m create pokemonList with sample data
+[33md441cdf[m removed old js file
+[33m58b099f[m create js, css, html file. Add alert and var
+[33m71e24d3[m create folder pokedex-app
+[33mcb82683[m Update README.md
+[33m5be5d1f[m Initial commit

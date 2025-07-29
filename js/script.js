@@ -17,6 +17,122 @@ const typeColors = {
   Fairy: "#EE99AC",
 };
 
+const translations = {
+  en: {
+    title: "Pokédex App",
+    subtitle: "Kanto Pokémon",
+    height: "Height",
+    type: "Type",
+    description: "Description",
+    modalName: "Name",
+    modalHeight: "Height",
+    modalType: "Type",
+    modalDescription: "Description",
+  },
+  it: {
+    title: "Pokédex App",
+    subtitle: "Pokémon di Kanto",
+    height: "Altezza",
+    type: "Tipo",
+    description: "Descrizione",
+    modalName: "Nome",
+    modalHeight: "Altezza",
+    modalType: "Tipo",
+    modalDescription: "Descrizione",
+  },
+  ja: {
+    title: "ポケモン図鑑",
+    subtitle: "カントー地方のポケモン",
+    height: "高さ",
+    type: "タイプ",
+    description: "説明",
+    modalName: "名前",
+    modalHeight: "高さ",
+    modalType: "タイプ",
+    modalDescription: "説明",
+  },
+};
+
+function getUserLanguage() {
+  const lang = navigator.language.slice(0, 2);
+  return translations[lang] ? lang : "en";
+}
+
+let currentLanguage = getUserLanguage();
+
+function applyTranslations(lang) {
+  //aggiorna testi statici pagina
+  document.querySelector("h1").textContent = translations[lange].subtitle;
+  document.querySelector("h2").textContent = translations[lang].title;
+  document.querySelector('label[for="modal-height"]').textContent =
+    translations[lang].height + ":";
+  document.querySelector('label[for="modal-type"]').textContent =
+    translations[lang].type + ":";
+
+  // Se il modal è aperto, aggiorna anche i suoi testi statici (etichette)
+  const modal = document.getElementById("modal");
+  if (modal && !modal.classList.contains("hidden")) {
+    document.getElementById("modal-height-label").textContent =
+      translations[lang].height + ":";
+    document.getElementById("modal-type-label").textContent =
+      translations[lang].type + ":";
+    document.getElementById("modal-description-label").textContent =
+      translations[lang].description + ":";
+  }
+}
+
+// Imposta classe "selected" al bottone lingua attivo
+function updateLanguageButtons(selectedLang) {
+  document.querySelectorAll("#language-selector button").forEach((btn) => {
+    if (btn.getAttribute("data-lang") === selectedLang) {
+      btn.classList.add("selected");
+    } else {
+      btn.classList.remove("selected");
+    }
+  });
+}
+
+// Aggiorna i testi dinamici della modale in base alla lingua
+function updateModalTexts(pokemon) {
+  const modalName = document.getElementById("modal-name");
+  const modalHeight = document.getElementById("modal-height");
+  const modalTypes = document.getElementById("modal-types");
+  const modalDescription = document.getElementById("modal-description");
+
+  modalName.textContent = capitalizeFirstLetter(pokemon.name);
+  modalHeight.textContent = pokemon.height;
+  const types = pokemon.types
+    ? pokemon.types.map((t) => capitalizeFirstLetter(t.type.name))
+    : [];
+  modalTypes.textContent = types.join(", ");
+
+  // Description in lingua corrente (la stringa è già tradotta in loadDetails)
+  modalDescription.textContent =
+    pokemon.description || "No description available.";
+}
+
+document.querySelectorAll("#language-selector button").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    const lang = e.target.getAttribute("data-lang");
+    if (translations[lang]) {
+      currentLanguage = lang;
+      applyTranslations(lang);
+      updateLanguageButtons(lang);
+      // Se il modal è aperto, aggiorna i testi dinamici con la nuova lingua
+      const modal = document.getElementById("modal");
+      if (!modal.classList.contains("hidden") && currentPokemon) {
+        // Ricarica i dettagli in lingua nuova e aggiorna modale
+        pokemonRepository.loadDetails(currentPokemon).then(() => {
+          updateModalTexts(currentPokemon);
+        });
+      }
+    }
+  });
+});
+
+// Variabile globale per tenere traccia del Pokémon corrente nella modale
+let currentPokemon = null;
+
 let pokemonRepository = (function () {
   let pokemonList = [];
   let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
@@ -89,9 +205,13 @@ let pokemonRepository = (function () {
       })
       .then((response) => response.json())
       .then((speciesDetails) => {
-        const flavor = speciesDetails.flavor_text_entries.find(
-          (entry) => entry.language.name === "en"
-        );
+        const flavor =
+          speciesDetails.flavor_text_entries.find(
+            (entry) => entry.language.name === currentLanguage
+          ) ||
+          speciesDetails.flavor_text_entries.find(
+            (entry) => entry.language.name === "en"
+          );
         item.description = flavor
           ? flavor.flavor_text.replace(/\n|\f/g, " ")
           : "No description available.";
@@ -105,16 +225,25 @@ let pokemonRepository = (function () {
   }
 
   function showDetails(pokemon) {
+    currentPokemon = pokemon; // aggiorna la variabile globale
     pokemonRepository.loadDetails(pokemon).then(function () {
       const modal = document.getElementById("modal");
       const modalImage = document.getElementById("modal-image");
+      //aggiorna immagine 
+      modalImage.src = pokemon.imageUrl;
+      modalImage.alt = pokemon.name;
+
+      updateModalTexts(pokemon); // aggiorna i testi dinamici della modale
+      modal.classList.remove("hidden");
+      //aggiorna etichette della modale in base alla lingua 
+
+      
+
       const modalName = document.getElementById("modal-name");
       const modalHeight = document.getElementById("modal-height");
       const modalTypes = document.getElementById("modal-types");
       const modalDescription = document.getElementById("modal-description");
 
-      modalImage.src = pokemon.imageUrl;
-      modalImage.alt = pokemon.name;
       modalName.textContent = capitalizeFirstLetter(pokemon.name);
       modalHeight.textContent = pokemon.height;
       modalDescription.textContent =
@@ -236,6 +365,8 @@ pokemonRepository.loadList().then(function () {
     }
   });
 })();
+
+applyTranslations(currentLanguage);
 
 // Funzione per trovare un Pokémon per nome
 /*   function findPokemonByName(name) {

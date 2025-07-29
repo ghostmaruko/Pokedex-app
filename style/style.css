@@ -1,6 +1,6 @@
 body {
   font-family: "Segoe UI", sans-serif;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
 }
@@ -70,7 +70,7 @@ h2 {
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.85rem;
-  font-weight: 7;
+  font-weight: 700;
 }
 
 .modal {
@@ -126,3 +126,53 @@ h2 {
   font-size: 0.95rem;
   color: #444;
 }
+
+.language-selector {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem auto;
+}
+
+#language-selector button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.lang-btn {
+  background-color: transparent;
+  border: 2px solid transparent;
+  /* border-radius: 50%; */
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  background-color: transparent
+}
+
+.lang-btn.selected {
+  border-color: #007bff;
+  background-color: #cce5ff;
+  font-weight: bold;
+}
+
+/* .language-switcher button {
+  padding: 8px 12px;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+  margin-right: 10px;
+  border-radius: 8px;
+}
+
+.language-switcher button.active {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+} */
