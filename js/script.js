@@ -83,10 +83,22 @@ let pokemonRepository = (function () {
         item.imageUrl = details.sprites.front_default;
         item.height = details.height;
         item.types = details.types;
+
+        // fetch: ottenere descrizione ogni pokémon
+        return fetch(`https://pokeapi.co/api/v2/pokemon-species/${item.id}/`);
+      })
+      .then((response) => response.json())
+      .then((speciesDetails) => {
+        const flavor = speciesDetails.flavor_text_entries.find(
+          (entry) => entry.language.name === "en"
+        );
+        item.description = flavor
+          ? flavor.flavor_text.replace(/\n|\f/g, " ")
+          : "No description available.";
         hideLoadingMessage(); // Nascondi il messaggio di caricamento dopo aver caricato i dettagli
         console.log("Dettagli del Pokémon aggiornati:", item); // Log dei dettagli aggiornati del Pokémon
       })
-      .catch(function (e) {
+      .catch((e) => {
         console.error(e);
         hideLoadingMessage(); // Nascondi il messaggio di caricamento in caso di errore
       });
@@ -99,11 +111,14 @@ let pokemonRepository = (function () {
       const modalName = document.getElementById("modal-name");
       const modalHeight = document.getElementById("modal-height");
       const modalTypes = document.getElementById("modal-types");
+      const modalDescription = document.getElementById("modal-description");
 
       modalImage.src = pokemon.imageUrl;
       modalImage.alt = pokemon.name;
       modalName.textContent = capitalizeFirstLetter(pokemon.name);
       modalHeight.textContent = pokemon.height;
+      modalDescription.textContent =
+        pokemon.description || "No description available.";
 
       // Mostra tipi
       const types = pokemon.types.map((t) =>
@@ -194,17 +209,33 @@ pokemonRepository.loadList().then(function () {
   });
 });
 
-// Chiudi modale
-document.getElementById("close-button").addEventListener("click", function () {
-  document.getElementById("modal").classList.add("hidden");
-});
+// Gestione del modal IIFE
+// Gestione del modal per mostrare i dettagli del Pokémon
+// Nascondi il modal inizialmente
+(function () {
+  const modal = document.getElementById("modal");
+  const closeButton = document.getElementById("close-button");
+  const modalContent = document.querySelector(".modal-content");
 
-// Chiudi cliccando fuori dal contenuto
-document.getElementById("modal").addEventListener("click", function (event) {
-  if (event.target === this) {
-    this.classList.add("hidden");
-  }
-});
+  // Chiudi con il pulsante
+  closeButton.addEventListener("click", function () {
+    modal.classList.add("hidden");
+  });
+
+  // Chiudi cliccando fuori dal contenuto
+  modal.addEventListener("click", function (event) {
+    if (!modalContent.contains(event.target)) {
+      modal.classList.add("hidden");
+    }
+  });
+
+  // Chiudi con ESC
+  window.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+      modal.classList.add("hidden");
+    }
+  });
+})();
 
 // Funzione per trovare un Pokémon per nome
 /*   function findPokemonByName(name) {

@@ -1,15 +1,46 @@
 📱 Pokédex App
 
-A simple JavaScript application that displays a list of Pokémon and allows users to view detailed information about each one.
+# Pokédex App
 
-This app was built as part of a JavaScript module in the CareerFoundry Web Development Program. It demonstrates core JavaScript skills such as DOM manipulation, event handling, and working with arrays and objects.
+Questa è una semplice applicazione Pokédex realizzata con HTML, CSS e JavaScript vanilla. L'applicazione carica i dati di 150 Pokémon dalla PokéAPI e li mostra in una griglia di card.
 
-🔧 Features:
+## Funzionalità principali
 
-    - Load and display a list of Pokémon
+- Caricamento dei dati da API esterna (https://pokeapi.co)
+- Visualizzazione dei Pokémon con immagine, numero, nome e tipi
+- Modal per mostrare i dettagli del Pokémon cliccato
+  - Nome
+  - Altezza
+  - Tipi
+  - Immagine
+  - (In futuro: descrizione testuale del Pokémon)
+  - Chiusura modale tramite:
+  - Bottone "Chiudi"
+  - Tasto ESC
+  - Clic fuori dalla modale
+- Layout responsive
 
-    - Show details for each Pokémon (name, height, types, etc.)
+## Tecnologie usate
 
-    - Responsive and accessible design
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Fetch API
+- PokéAPI
 
-    - Clean project structure with HTML, CSS, and JavaScript separation
+## Struttura del progetto
+
+- `index.html`: struttura base della pagina
+- `styles.css`: styling e responsive layout
+- `scripts.js`: logica dell'applicazione, gestione modale, caricamento dati e UI
+
+## Note
+
+L'applicazione è realizzata seguendo il corso di CareerFoundry e implementa pattern UI comuni come modali e validazioni. La modale è implementata da zero senza librerie esterne.
+
+## Possibili miglioramenti futuri
+
+- Aggiunta della descrizione testuale del Pokémon (come nelle carte Pokémon)
+- Funzionalità di ricerca o filtro
+- Ordinamento per nome/altezza/tipo
+- Modal dialog con conferme e interazioni
