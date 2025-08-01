@@ -1,7 +1,7 @@
 body {
   font-family: "Segoe UI", sans-serif;
   background-color: #f2f2f2;
-  margin: 0;
+  margin-top: 70px;
   padding: 0;
 }
 
@@ -23,18 +23,34 @@ h2 {
 }
 
 .pokemon-card {
-  background: #cfcfcf;
   border-radius: 16px;
-  width: 240px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .pokemon-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.lang-btn {
+  background-color: transparent;
+  border: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  background-color: transparent;
+}
+
+.lang-btn.selected {
+  font-weight: bold;
+  color: red;
 }
 
 .pokemon-image {
