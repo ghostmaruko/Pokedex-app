@@ -163,8 +163,10 @@ let container = document.getElementById("pokemon-container");
 // Crea le card dei Pokémon
 function createPokemonCards() {
   pokemonRepository.getAll().forEach(function (pokemon) {
-    const card = document.createElement("div");
-    card.className = "pokemon-card";
+    /* const card = document.createElement("div");
+    card.className = "pokemon-card"; */
+    const card = document.createElement("li");
+    card.className = "list-group-item pokemon-card";
 
     // Estrai i nomi dei tipi (es. "Fire", "Flying")
     const types = pokemon.types.map((t) => capitalizeFirstLetter(t.type.name));
