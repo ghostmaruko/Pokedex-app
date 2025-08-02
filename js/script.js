@@ -1,22 +1,68 @@
-const typeColors = {
-  Grass: "#78C850",
-  Fire: "#F08030",
-  Water: "#6890F0",
-  Poison: "#A040A0",
-  Flying: "#A890F0",
-  Bug: "#A8B820",
-  Normal: "#A8A878",
-  Electric: "#F8D030",
-  Ground: "#E0C068",
-  Psychic: "#F85888",
-  Rock: "#B8A038",
-  Ice: "#98D8D8",
-  Dragon: "#7038F8",
-  Dark: "#705848",
-  Steel: "#B8B8D0",
-  Fairy: "#EE99AC",
+// --- Traduzioni tipo Pokémon ---
+const typeTranslations = {
+  en: {
+    Fire: "Fire",
+    Water: "Water",
+    Grass: "Grass",
+    Electric: "Electric",
+    Psychic: "Psychic",
+    Ice: "Ice",
+    Dragon: "Dragon",
+    Dark: "Dark",
+    Fairy: "Fairy",
+    Normal: "Normal",
+    Fighting: "Fighting",
+    Flying: "Flying",
+    Poison: "Poison",
+    Ground: "Ground",
+    Rock: "Rock",
+    Bug: "Bug",
+    Ghost: "Ghost",
+    Steel: "Steel",
+  },
+  it: {
+    Fire: "Fuoco",
+    Water: "Acqua",
+    Grass: "Erba",
+    Electric: "Elettro",
+    Psychic: "Psico",
+    Ice: "Ghiaccio",
+    Dragon: "Drago",
+    Dark: "Buio",
+    Fairy: "Folletto",
+    Normal: "Normale",
+    Fighting: "Lotta",
+    Flying: "Volante",
+    Poison: "Veleno",
+    Ground: "Terra",
+    Rock: "Roccia",
+    Bug: "Coleottero",
+    Ghost: "Spettro",
+    Steel: "Acciaio",
+  },
+  ja: {
+    Fire: "ほのお",
+    Water: "みず",
+    Grass: "くさ",
+    Electric: "でんき",
+    Psychic: "エスパー",
+    Ice: "こおり",
+    Dragon: "ドラゴン",
+    Dark: "あく",
+    Fairy: "フェアリー",
+    Normal: "ノーマル",
+    Fighting: "かくとう",
+    Flying: "ひこう",
+    Poison: "どく",
+    Ground: "じめん",
+    Rock: "いわ",
+    Bug: "むし",
+    Ghost: "ゴースト",
+    Steel: "はがね",
+  },
 };
 
+// --- Traduzioni interfaccia ---
 const translations = {
   en: {
     title: "Pokédex App",
@@ -48,66 +94,29 @@ function getUserLanguage() {
 
 let currentLanguage = getUserLanguage();
 
-function applyTranslations(lang) {
-  document.querySelector("h1").textContent = translations[lang].subtitle;
-  document.querySelector("h2").textContent = translations[lang].title;
-  document.querySelectorAll(".pokemon-card").forEach((card) => {
-    const name = card.getAttribute(`data-name-${lang}`);
-    const types = card.getAttribute(`data-types-${lang}`);
-    if (name) {
-      card.querySelector(".pokemon-name").textContent = name;
-    }
-    if (types) {
-      const typeArray = types.split(",");
-      const typeHTML = typeArray
-        .map(
-          (t) =>
-            `<span class="type-badge" style="background-color:${
-              typeColors[t] || "#ccc"
-            }">${t}</span>`
-        )
-        .join("");
-      card.querySelector(".pokemon-type").innerHTML = typeHTML;
-    }
-  });
-  // Update modal if it's open
-  if (currentPokemon) {
-    updateModalTexts(currentPokemon);
-  }
-}
+// --- Colori tipo Pokémon (sempre inglese come chiave) ---
+const typeColors = {
+  Grass: "#78C850",
+  Fire: "#F08030",
+  Water: "#6890F0",
+  Poison: "#A040A0",
+  Flying: "#A890F0",
+  Bug: "#A8B820",
+  Normal: "#A8A878",
+  Electric: "#F8D030",
+  Ground: "#E0C068",
+  Psychic: "#F85888",
+  Rock: "#B8A038",
+  Ice: "#98D8D8",
+  Dragon: "#7038F8",
+  Dark: "#705848",
+  Steel: "#B8B8D0",
+  Fairy: "#EE99AC",
+  Fighting: "#C03028",
+  Ghost: "#705898",
+};
 
-function updateLanguageButtons(selectedLang) {
-  document.querySelectorAll("#language-selector button").forEach((btn) => {
-    if (btn.getAttribute("data-lang") === selectedLang) {
-      btn.classList.add("selected");
-    } else {
-      btn.classList.remove("selected");
-    }
-  });
-}
-
-function updateModalTexts(pokemon) {
-  document.getElementById("modal-name").textContent =
-    pokemon.localizedNames[currentLanguage] || capitalizeFirstLetter(pokemon.name);
-  document.getElementById("modal-description").textContent =
-    pokemon.description || "No description available.";
-}
-
-document.querySelectorAll("#language-selector button").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    const lang = e.currentTarget.getAttribute("data-lang");
-    if (translations[lang]) {
-      currentLanguage = lang;
-      applyTranslations(lang);
-      updateLanguageButtons(lang);
-      container.innerHTML = "";
-      createPokemonCards();
-    }
-  });
-});
-
-let currentPokemon = null;
-
+// --- Repository Pokémon ---
 let pokemonRepository = (function () {
   let pokemonList = [];
   let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
@@ -126,17 +135,16 @@ let pokemonRepository = (function () {
       console.log("Pokemon is not valid:", pokemon);
     }
   }
+
   function getAll() {
     return pokemonList;
   }
 
   function loadList() {
     return fetch(apiUrl)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (json) {
-        json.results.forEach(function (item) {
+      .then((response) => response.json())
+      .then((json) => {
+        json.results.forEach((item) => {
           let pokemon = {
             name: item.name,
             detailsUrl: item.url,
@@ -145,13 +153,12 @@ let pokemonRepository = (function () {
             height: 0,
             weight: 0,
             localizedNames: {},
-            localizedTypes: {},
           };
           add(pokemon);
         });
         hideLoadingMessage();
       })
-      .catch(function (e) {
+      .catch((e) => {
         console.error("Error loading Pokémon list:", e);
         hideLoadingMessage();
       });
@@ -166,6 +173,7 @@ let pokemonRepository = (function () {
         item.imageUrl = details.sprites.front_default;
         item.height = details.height;
         item.types = details.types;
+
         return fetch(`https://pokeapi.co/api/v2/pokemon-species/${item.id}/`);
       })
       .then((response) => response.json())
@@ -181,20 +189,12 @@ let pokemonRepository = (function () {
           ? flavor.flavor_text.replace(/\n|\f/g, " ")
           : "No description available.";
 
-        item.localizedNames = {};
-        item.localizedTypes = {};
         speciesDetails.names.forEach((n) => {
           if (translations[n.language.name]) {
             item.localizedNames[n.language.name] = n.name;
           }
         });
-        item.types.forEach((typeObj) => {
-          const typeName = typeObj.type.name;
-          item.localizedTypes[typeName] = {};
-          Object.keys(translations).forEach((lang) => {
-            item.localizedTypes[typeName][lang] = capitalizeFirstLetter(typeName);
-          });
-        });
+
         hideLoadingMessage();
       })
       .catch((e) => {
@@ -206,12 +206,36 @@ let pokemonRepository = (function () {
   function showDetails(pokemon) {
     currentPokemon = pokemon;
     pokemonRepository.loadDetails(pokemon).then(function () {
-      const modal = document.getElementById("modal");
       const modalImage = document.getElementById("modal-image");
+      const modalName = document.getElementById("pokemonModalLabel");
+      const modalHeight = document.getElementById("modal-height");
+      const modalTypes = document.getElementById("modal-types");
+      const modalDescription = document.getElementById("modal-description");
+
       modalImage.src = pokemon.imageUrl;
       modalImage.alt = pokemon.name;
-      updateModalTexts(pokemon);
-      modal.classList.remove("hidden");
+      modalName.textContent =
+        pokemon.localizedNames[currentLanguage] ||
+        capitalizeFirstLetter(pokemon.name);
+      modalHeight.textContent = `${translations[currentLanguage].height}: ${
+        pokemon.height / 10
+      } m`;
+
+      const typeHTML = pokemon.types
+        .map((t) => {
+          const englishType = capitalizeFirstLetter(t.type.name);
+          const translated =
+            typeTranslations[currentLanguage][englishType] || englishType;
+          const color = typeColors[englishType] || "#ccc";
+          return `<span class="badge badge-pill" style="background-color: ${color}">${translated}</span>`;
+        })
+        .join(" ");
+
+      modalTypes.innerHTML = `${translations[currentLanguage].type}: ${typeHTML}`;
+      modalDescription.textContent =
+        pokemon.description || "No description available.";
+
+      $("#pokemonModal").modal("show");
     });
   }
 
@@ -228,50 +252,64 @@ let pokemonRepository = (function () {
   }
 
   return {
-    add: add,
-    getAll: getAll,
-    loadList: loadList,
-    loadDetails: loadDetails,
-    showDetails: showDetails,
-    showLoadingMessage: showLoadingMessage,
-    hideLoadingMessage: hideLoadingMessage,
+    add,
+    getAll,
+    loadList,
+    loadDetails,
+    showDetails,
+    showLoadingMessage,
+    hideLoadingMessage,
   };
 })();
 
+// --- Utils ---
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// --- Applica traduzioni base (h1/h2) ---
+function applyTranslations(lang) {
+  document.querySelector("h1").textContent = translations[lang].subtitle;
+  document.querySelector("h2").textContent = translations[lang].title;
+}
+
+// --- Generazione Card ---
 let container = document.getElementById("pokemon-container");
 
 function createPokemonCards() {
+  container.innerHTML = "";
   pokemonRepository.getAll().forEach(function (pokemon) {
     const card = document.createElement("div");
-    card.className = "pokemon-card";
+    card.className = "pokemon-card card";
 
     const name =
       pokemon.localizedNames[currentLanguage] ||
       capitalizeFirstLetter(pokemon.name);
-    const types = pokemon.types.map((t) => capitalizeFirstLetter(t.type.name));
-    const localizedTypes = types.map((t) => t);
-    const color1 = typeColors[types[0]] || "#999";
 
-    card.setAttribute(`data-name-${currentLanguage}`, name);
-    card.setAttribute(`data-types-${currentLanguage}`, localizedTypes.join(","));
+    const types = pokemon.types.map((t) => {
+      const englishType = capitalizeFirstLetter(t.type.name);
+      return {
+        english: englishType,
+        translated:
+          typeTranslations[currentLanguage][englishType] || englishType,
+      };
+    });
 
     card.innerHTML = `
       <img class="pokemon-image" src="${pokemon.imageUrl}" alt="${
       pokemon.name
     }" />
-      <div class="pokemon-number">#${pokemon.id.toString().padStart(3, "0")}</div>
+      <div class="pokemon-number">#${pokemon.id
+        .toString()
+        .padStart(3, "0")}</div>
       <div class="pokemon-name">${name}</div>
       <div class="pokemon-type">
         ${types
           .map(
             (t) =>
               `<span class="type-badge" style="background-color:${
-                typeColors[t]
-              }">${t}</span>`
+                typeColors[t.english] || "#ccc"
+              }">${t.translated}</span>`
           )
           .join("")}
       </div>
@@ -285,35 +323,62 @@ function createPokemonCards() {
   });
 }
 
+// --- Gestione cambio lingua ---
+document.querySelectorAll("#language-selector button").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    const lang = e.currentTarget.getAttribute("data-lang");
+    if (translations[lang]) {
+      currentLanguage = lang;
+      applyTranslations(lang);
+      createPokemonCards();
+    }
+  });
+});
+
+// --- Caricamento iniziale ---
+let currentPokemon = null;
+
 pokemonRepository.loadList().then(function () {
   let promises = pokemonRepository
     .getAll()
     .map((pokemon) => pokemonRepository.loadDetails(pokemon));
   Promise.all(promises).then(function () {
+    applyTranslations(currentLanguage);
     createPokemonCards();
   });
 });
 
-(function () {
-  const modal = document.getElementById("modal");
-  const closeButton = document.getElementById("close-button");
-  const modalContent = document.querySelector(".modal-content");
+// --- Modalità Giorno/Notte ---
+const themeToggle = document.getElementById("theme-toggle");
+const userPref = localStorage.getItem("theme");
 
-  closeButton.addEventListener("click", function () {
-    modal.classList.add("hidden");
+if (userPref === "dark") {
+  document.body.classList.add("dark-mode");
+  themeToggle.classList.add("active");
+  themeToggle.textContent = "🌞";
+}
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.body.classList.toggle("dark-mode");
+  themeToggle.classList.toggle("active");
+  themeToggle.textContent = isDark ? "🌞" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
+// --- Ricerca Pokémon ---
+document.getElementById("searchForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const query = e.target.querySelector("input").value.trim().toLowerCase();
+  const allCards = document.querySelectorAll(".pokemon-card");
+  // Se il campo è vuoto, mostra tutte le card
+  if (query === "") {
+    allCards.forEach((card) => (card.style.display = "block"));
+    return;
+  }
+  // Altrimenti, filtra in base al nome
+  allCards.forEach((card) => {
+    const name = card.querySelector(".pokemon-name").textContent.toLowerCase();
+    const match = name.includes(query);
+    card.style.display = match ? "block" : "none";
   });
-
-  modal.addEventListener("click", function (event) {
-    if (!modalContent.contains(event.target)) {
-      modal.classList.add("hidden");
-    }
-  });
-
-  window.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && !modal.classList.contains("hidden")) {
-      modal.classList.add("hidden");
-    }
-  });
-})();
-
-applyTranslations(currentLanguage);
+});

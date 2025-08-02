@@ -4,53 +4,154 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokédex App</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+
+    <!-- Favicon -->
+    <link
+      href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////ALOspAD6+voAAwP/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREAAAAAARERERAAAAAREREREQAAARERABEREAABERAiAREQAAAAADMAAAAABERAIgREQAAEREQARERAAAREREREREAAAEREREREAAAABEREREAAAAAAREREAAAAAAAAAAAAAAAAAAAAAAAAD//wAA+B8AAPAPAADgBwAAwAMAAIABAACAAQAAgAEAAIABAACAAQAAgAEAAMADAADgBwAA8A8AAPgfAAD//wAA"
+      rel="icon"
+      type="image/x-icon"
+    />
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
+    <!-- Navbar -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img
+            src="img/logo-pokemon.svg"
+            alt="Pokemon Logo"
+            height="70"
+            width="120"
+          />
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Sinistra -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#"></a>
+            </li>
+          </ul>
+
+          <!-- Destra -->
+          <div class="d-flex align-items-center gap-2">
+            <!-- Search form -->
+            <form id="searchForm" class="d-flex" role="search">
+              <input
+                class="form-control me-2 form__input"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-light" type="submit">Search</button>
+            </form>
+
+            <!-- Theme toggle -->
+            <button
+              id="theme-toggle"
+              class="btn btn-outline-light"
+              aria-label="Toggle theme"
+            >
+              🌙
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Titoli -->
     <h1>Kanto Pokémon</h1>
     <h2>Pokédex App</h2>
 
-    <div id="language-selector">
-      <button data-lang="en" class="lang-btn" aria-label="English">
-        🇬🇧 English
+    <!-- Selettore lingua -->
+    <div id="language-selector" class="text-center my-3">
+      <button
+        data-lang="en"
+        class="lang-btn btn btn-outline-secondary"
+        aria-label="English"
+      >
+        English
       </button>
-      <button data-lang="it" class="lang-btn" aria-label="Italiano">
-        🇮🇹 Italiano
+      <button
+        data-lang="it"
+        class="lang-btn btn btn-outline-secondary"
+        aria-label="Italiano"
+      >
+        Italiano
       </button>
-      <button data-lang="ja" class="lang-btn" aria-label="日本語">
-        🇯🇵 日本語
+      <button
+        data-lang="ja"
+        class="lang-btn btn btn-outline-secondary"
+        aria-label="日本語"
+      >
+        日本語
       </button>
     </div>
 
-    <div id="pokemon-container"></div>
+    <!-- Contenitore Pokémon -->
+    <div id="pokemon-container" class="container"></div>
 
-    <!-- Modale per i dettagli -->
-    <div id="modal" class="modal hidden">
-      <div class="modal-content">
-        <span id="close-button" class="close-button">&times;</span>
-        <img
-          id="modal-image"
-          src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-          alt=""
-          class="modal-image"
-        />
-        <h2 id="modal-name"></h2>
-        <p>
-          <!-- <label id="modal-height-label" for="modal-height">Altezza:</label> -->
-          <span id="modal-height"></span>
-
-          <!-- <label id="modal-type-label" for="modal-types">Tipo:</label> -->
-          <span id="modal-types"></span>
-
-          <!--  <label id="modal-description-label" for="modal-description"
-            >Descrizione:</label
-          > -->
-        </p>
-
-        <p id="modal-description"></p>
+    <!-- Modale Pokémon -->
+    <div
+      class="modal fade"
+      id="pokemonModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="pokemonModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pokemonModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <img id="modal-image" class="img-fluid mb-3" alt="" />
+            <p id="modal-height"></p>
+            <p id="modal-types"></p>
+            <p id="modal-description" class="text-muted"></p>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
     <script src="js/promise-polyfill.js"></script>
     <script src="js/fetch-polyfill.js"></script>
     <script src="js/script.js" defer></script>
