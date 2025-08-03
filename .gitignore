@@ -1,0 +1,13 @@
+# Esclude le dipendenze
+node_modules/
+
+# Evita di caricare i file temporanei
+.DS_Store
+Thumbs.db
+
+# File generati da npm
+npm-debug.log*
+package-lock.json
+
+# Cartelle di build
+dist/
