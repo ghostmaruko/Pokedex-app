@@ -1,26 +1,44 @@
-📱 Pokédex App
-
 # Pokédex App
 
-Questa è una semplice applicazione Pokédex realizzata con HTML, CSS e JavaScript vanilla. L'applicazione carica i dati di 150 Pokémon dalla PokéAPI e li mostra in una griglia di card.
+A simple and lightweight Pokédex application built with HTML, CSS, and vanilla JavaScript.
+The app loads data for the first 150 Pokémon using the PokéAPI and displays them in a responsive grid, with a modal showing detailed information for each selected Pokémon.
 
-## Funzionalità principali
+----
 
-- Caricamento dei dati da API esterna (https://pokeapi.co)
-- Visualizzazione dei Pokémon con immagine, numero, nome e tipi
-- Modal per mostrare i dettagli del Pokémon cliccato
-  - Nome
-  - Altezza
-  - Tipi
-  - Immagine
-  - (In futuro: descrizione testuale del Pokémon)
-  - Chiusura modale tramite:
-  - Bottone "Chiudi"
-  - Tasto ESC
-  - Clic fuori dalla modale
-- Layout responsive
+## Project Context (Achievement 1 – CareerFoundry)
 
-## Tecnologie usate
+This project is part of Achievement 1 of the CareerFoundry Full-Stack Development Program, focused on building a complete JavaScript web application.
+
+The goals of the Achievement are to:
+
+- build a functional web app using HTML, CSS, and pure JavaScript
+- learn how to load and manage data from an external API
+- handle interactive UI components (such as modals)
+- apply code best practices (ESLint / Prettier)
+- design a visually clean and user-friendly interface
+- create a project ready to be presented in a portfolio
+
+The project meets all core module requirements:
+
+- ✔ Data loaded from an external API
+- ✔ Dynamic list rendering
+- ✔ On-demand details via user interactions
+- ✔ Fully responsive and usable UI
+- ✔ No usage errors during interaction
+- ✔ Deployable and easily reviewable by potential recruiters
+----
+
+## Main Features
+
+- Fetch Pokémon data from an external API (https://pokeapi.co)
+- Display Pokémon with images, numbers, names, and types
+- Custom-built detail modal (no external libraries used)
+- Close modal via button, ESC key, or outside click
+- Responsive layout for all screen sizes
+
+----
+
+## Technologies Used
 
 - HTML5
 - CSS3
@@ -28,19 +46,40 @@ Questa è una semplice applicazione Pokédex realizzata con HTML, CSS e JavaScri
 - Fetch API
 - PokéAPI
 
-## Struttura del progetto
+----
+
+## Project Structure
 
 - `index.html`: struttura base della pagina
 - `styles.css`: styling e responsive layout
 - `scripts.js`: logica dell'applicazione, gestione modale, caricamento dati e UI
 
-## Note
+----
 
-L'applicazione è realizzata seguendo il corso di CareerFoundry e implementa pattern UI comuni come modali e validazioni. La modale è implementata da zero senza librerie esterne.
+## Development Notes
 
-## Possibili miglioramenti futuri
+- Sviluppo realizzato interamente in JavaScript vanilla, senza framework
+- Modale implementata manualmente, per comprendere meglio manipolazione del DOM
+- UI progettata per essere semplice, pulita e facilmente navigabile
+- Progetto pensato per essere incluso nel portfolio come esempio di:
+- utilizzo API
+- architettura front-end di base
+- debugging
+- gestione eventi
 
-- Aggiunta della descrizione testuale del Pokémon (come nelle carte Pokémon)
-- Funzionalità di ricerca o filtro
-- Ordinamento per nome/altezza/tipo
-- Modal dialog con conferme e interazioni
+----
+
+## Future Improvements
+
+- Aggiungere la descrizione del Pokémon
+- Implementare una barra di ricerca
+- Filtri per tipo
+- Ordinamento personalizzabile
+- Migliorie UI/UX (transizioni, animazioni)
+
+----
+
+### License / Usage
+
+Progetto creato a scopo didattico nell’ambito del programma CareerFoundry.
+La PokéAPI è un servizio pubblico gratuito.
