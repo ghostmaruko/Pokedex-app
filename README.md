@@ -89,8 +89,18 @@ La PokéAPI è un servizio pubblico gratuito.
 
 # Screenshot
 
+**Pokedex Light View** 
 ![Pokedex Light View](screenshot/Pokedex_light.png)
+
+**Pokedex Dark View**
 ![Pokedex Dark View](screenshot/Pokedex_night.png)
+
+**Pokedex JP Lamguage**
 ![Pokedex JP language](screenshot/pokemon_jp.png)
+
+**Pokedex Search**
 ![Pokedex Seacrh](screenshot/pokemon_search.png)
+
+**Pokedex View Card**
 ![Pokedex View Card](screenshot/pokemon_view_card.png)
+
