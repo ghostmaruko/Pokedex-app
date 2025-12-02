@@ -3,7 +3,7 @@
 A simple and lightweight Pokédex application built with HTML, CSS, and vanilla JavaScript.
 The app loads data for the first 150 Pokémon using the PokéAPI and displays them in a responsive grid, with a modal showing detailed information for each selected Pokémon.
 
-----
+---
 
 ## Project Context (Achievement 1 – CareerFoundry)
 
@@ -26,7 +26,8 @@ The project meets all core module requirements:
 - ✔ Fully responsive and usable UI
 - ✔ No usage errors during interaction
 - ✔ Deployable and easily reviewable by potential recruiters
-----
+
+---
 
 ## Main Features
 
@@ -36,7 +37,7 @@ The project meets all core module requirements:
 - Close modal via button, ESC key, or outside click
 - Responsive layout for all screen sizes
 
-----
+---
 
 ## Technologies Used
 
@@ -46,7 +47,7 @@ The project meets all core module requirements:
 - Fetch API
 - PokéAPI
 
-----
+---
 
 ## Project Structure
 
@@ -54,7 +55,7 @@ The project meets all core module requirements:
 - `styles.css`: styling e responsive layout
 - `scripts.js`: logica dell'applicazione, gestione modale, caricamento dati e UI
 
-----
+---
 
 ## Development Notes
 
@@ -67,7 +68,7 @@ The project meets all core module requirements:
 - debugging
 - gestione eventi
 
-----
+---
 
 ## Future Improvements
 
@@ -77,9 +78,19 @@ The project meets all core module requirements:
 - Ordinamento personalizzabile
 - Migliorie UI/UX (transizioni, animazioni)
 
-----
+---
 
 ### License / Usage
 
 Progetto creato a scopo didattico nell’ambito del programma CareerFoundry.
 La PokéAPI è un servizio pubblico gratuito.
+
+---
+
+# Screenshot
+
+![Pokedex Light View](screenshot/Pokedex_light.png)
+![Pokedex Dark View](screenshot/Pokedex_night.png)
+![Pokedex JP language](screenshot/pokemon_jp.png)
+![Pokedex Seacrh](screenshot/pokemon_search.png)
+![Pokedex View Card](screenshot/pokemon_view_card.png)
